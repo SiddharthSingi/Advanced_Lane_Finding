@@ -1,11 +1,5 @@
 # Advanced_Lane_Finding
 
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
-
 **Advanced Lane Finding Project**
 
 The goals / steps of this project are the following:
@@ -62,6 +56,7 @@ Undistorted Image:
 ### Pipeline (single images)
 
 #### 1. Provide an example of a distortion-corrected image.
+![undistortedroad](https://user-images.githubusercontent.com/26694585/27223560-928011ce-52ae-11e7-9876-676756f5bea9.jpg)
 
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
@@ -113,6 +108,7 @@ This resulted in the following source and destination points:
 
 The image below shows the source and destination points on an image with straight lane lines:
 The red and blue points are source and destination points repectively:
+
 ![src2dest](https://user-images.githubusercontent.com/26694585/27222209-0c80c9b0-52a9-11e7-9f87-9d5df9f20d73.jpg)
 
 
@@ -122,13 +118,19 @@ I verified that my perspective transform was working as expected by drawing the 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+Initial Lane identification takes place in the 7th code cell of the jupyter notebook.
+Method:
+I took a histogram of the bottom half of the image to find the starting points of the lanes. Like this:
+
+![histogram](https://user-images.githubusercontent.com/26694585/27223946-50574f9a-52b0-11e7-9df6-722d0ce3a465.jpg)
+
+Starting from these points I formed a rectangle of 100x50 pixels, and i stored all the points inside this rectangle in a seperate variable, if the number of pixels inside the rectangle was more than 50 then the a new rectangle would be formed at the mean point of all the pixels inside the previous rectangle. This would continue until all the pixel values for the lane lines arent collected. Then these identified co-ordinates (marked in red and blue in the below image) would be passed to the np.polyfit() function to obtain the polynomial coefficients of the lane lines.
 
 ![polynomial](https://user-images.githubusercontent.com/26694585/27222237-263f4246-52a9-11e7-81fe-0c0b188d4f1e.jpg)
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+To calcualate these values of the road I wrote a funtion called `get_lane_values()` in the 23rd code cell. This function takes left_fitx, and right_fitx as inputs and returns mean distance between the lanes, centre of vehicle offset, left lane radius and right lane radius. This function is used in displaying the road values on the final output as well as to check the sanity of the new found lane lines.
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
@@ -150,6 +152,9 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Initially, I had taken a region of interest first and then used different color channels to get a binary image, this works in the S channel but not on sobel operators. In the Sobel operation we divide the image pixels by np.max(abs_sobel), and due to the black part of the image generated after using ROI, this value would be too high and would hence identify incorrect lines on the image
+Initially, I had taken a region of interest first and then used different color channels to get a binary image, this works in the S channel but not on sobel operators. In the Sobel operation we divide the image pixels by np.max(abs_sobel), and due to the black part of the image generated after using ROI, this value would be too high and would hence identify incorrect lines on the image.
+
+
+My pipeline fails in rains and at night when there is a lot of artificial light reflecting of the road. And it also fails on shadows created by objects not on the road.
 
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
