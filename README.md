@@ -135,8 +135,8 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a link to my project video result [https://youtu.be/C-QShn4fnCQ](url)
-Here's a link to my challenge video result [https://youtu.be/6CpQ50lcEBA](url)
+Here's a link to my project video result [YouTube](https://youtu.be/C-QShn4fnCQ)
+Here's a link to my challenge video result [YouTube](https://youtu.be/6CpQ50lcEBA)
 
 ---
 
